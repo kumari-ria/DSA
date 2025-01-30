@@ -1,0 +1,303 @@
+                                           ASSIGNMENT NO 01
+PROBLEM STATEMENT:
+Consider telephone book database of N clients. Make use of a hash table implementation 
+to quickly look up client‘s telephone number. Make use of two collision handling 
+techniques and compare them using number of comparisons required to find a set of 
+telephone numbers
+
+
+            
+       class Hashtable:
+    def __init__(self):
+        self.m = int(input("Enter size of hash table: "))
+        self.hashTable = [None] * self.m
+        self.elecount = 0
+
+    def hashFunction(self, key):
+        return key % self.m
+
+    def isFull(self):
+        return self.elecount == self.m
+
+    def insert(self, key, data, probing_method):
+        if self.isFull():
+            print("Table is full.")
+            return
+        index = self.hashFunction(key)
+        compare = 0
+
+        # Insert using the specified probing method (Linear or Quadratic)
+        while self.hashTable[index] is not None:
+            compare += 1
+            index = probing_method(index, compare)
+
+        self.hashTable[index] = [key, data]
+        self.elecount += 1
+        print(f"Data inserted at index {index}.")
+        print(self.hashTable)
+        print(f"Number of comparisons: {compare}")
+
+    def search(self, key, data, probing_method):
+        index = self.hashFunction(key)
+        compare = 0
+
+        # Search using the specified probing method (Linear or Quadratic)
+        while self.hashTable[index] is not None:
+            compare += 1
+            if self.hashTable[index] == [key, data]:
+                return index
+            index = probing_method(index, compare)
+        return None
+
+    def linearProbe(self, index, compare):
+        return (index + 1) % self.m
+
+    def quadraticProbe(self, index, compare):
+        return (index + compare * compare) % self.m
+
+
+def menu():
+    obj = Hashtable()
+
+    while True:
+        print("************************")
+        print("1. Linear Probe Insert/Search")
+        print("2. Quadratic Probe Insert/Search")
+        print("3. Exit")
+        print("************************")
+
+        ch = int(input("Enter Choice: "))
+        if ch == 1:
+            while True:
+                print("** 1. Insert **")
+                print("** 2. Search **")
+                print("** 3. Exit **")
+                ch2 = int(input("Enter choice: "))
+                if ch2 == 1:
+                    key = int(input("Enter key (phone number): "))
+                    data = input("Enter data (name): ")
+                    obj.insert(key, data, obj.linearProbe)
+                elif ch2 == 2:
+                    key = int(input("Enter key to be searched: "))
+                    data = input("Enter data (name): ")
+                    result = obj.search(key, data, obj.linearProbe)
+                    if result is None:
+                        print("Key not found.")
+                    else:
+                        print(f"Key found at index {result}.")
+                else:
+                    break
+        elif ch == 2:
+            while True:
+                print("** 1. Insert **")
+                print("** 2. Search **")
+                print("** 3. Exit **")
+                ch2 = int(input("Enter choice: "))
+                if ch2 == 1:
+                    key = int(input("Enter key (phone number): "))
+                    data = input("Enter data (name): ")
+                    obj.insert(key, data, obj.quadraticProbe)
+                elif ch2 == 2:
+                    key = int(input("Enter key to be searched: "))
+                    data = input("Enter data (name): ")
+                    result = obj.search(key, data, obj.quadraticProbe)
+                    if result is None:
+                        print("Key not found.")
+                    else:
+                        print(f"Key found at index {result}.")
+                else:
+                    break
+        else:
+            break
+
+
+menu()
+output
+PS G:\My Drive\DSA> python -u "g:\My Drive\DSA\ass1.py"
+Enter size of hash table: 2
+************************        
+1. Linear Probe Insert/Search   
+2. Quadratic Probe Insert/Search
+3. Exit
+************************        
+Enter Choice: 1
+** 1. Insert **
+** 2. Search **
+** 3. Exit **  
+Enter choice: 1
+Enter key (phone number): 45678465764
+Enter data (name): riya
+Data inserted at index 0.    
+[[45678465764, 'riya'], None]
+Number of comparisons: 0     
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 4857847589
+Enter data (name): ruchi
+Key not found. 
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 4878473587
+Enter data (name): riyansh
+Data inserted at index 1.
+[[45678465764, 'riya'], [4878473587, 'riyansh']]
+Number of comparisons: 0
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 3
+************************
+1. Linear Probe Insert/Search
+2. Quadratic Probe Insert/Search
+3. Exit
+************************
+Enter Choice: 2
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 48657846786
+Enter data (name): rks
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 8974587487
+Enter data (name): ruc
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 845847874
+Enter data (name): sss
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+Enter choice: 1
+Enter key (phone number): 48657846786
+Enter data (name): rks
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 8974587487
+Enter data (name): ruc
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 845847874
+Enter data (name): sss
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+Enter data (name): rks
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 8974587487
+Enter data (name): ruc
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 845847874
+Enter data (name): sss
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 8974587487
+Enter data (name): ruc
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 845847874
+Enter data (name): sss
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+Enter key (phone number): 8974587487
+Enter data (name): ruc
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 845847874
+Enter data (name): sss
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 1
+Enter key (phone number): 845847874
+Enter data (name): sss
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+Enter data (name): sss
+Table is full.
+** 1. Insert **
+** 2. Search **
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+** 3. Exit **
+Enter choice: 2
+Enter key to be searched: 845847874
+Enter data (name): sss
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
